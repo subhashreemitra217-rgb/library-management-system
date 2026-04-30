@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMC COLLEGE LIBRARY Login</title>
+    
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #cbc1f7, #d6f7f6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        @keyframes fadeInScaleUp {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes waveShimmer {
+            0% { left: -100%; }
+            50% { left: 120%; }
+            100% { left: 120%; }
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            width: 700px;
+            height: 600px;
+            overflow: hidden;
+            animation: fadeInScaleUp 0.7s ease-out forwards;
+        }
+
+        .header-wave {
+            background: linear-gradient(135deg, #7B60F0, #48D1CC);
+            color: white;
+            padding: 40px 20px 60px 20px;
+            border-bottom-left-radius: 50% 40px;
+            border-bottom-right-radius: 50% 40px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-wave::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%; 
+            width: 75%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: skewX(-25deg);
+            animation: waveShimmer 3.5s infinite 1.2s ease-in-out;
+        }
+
+
+        .header-wave h1 {
+            margin: 0;
+            font-size: 2em;
+            font-weight: 600;
+            position: relative; 
+            z-index: 1;
+        }
+
+        #initial-content {
+            opacity: 1;
+            transform:matrix3d(0);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+            padding: 0 20px;
+        }
+        #initial-content.hidden {
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+        }
+
+        #account-choice-message {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+        }
+
+        .account-options {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .account-box {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            width: 350vw;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .account-box:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .account-box img {
+            height: 70px;
+            width: 70px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .account-box h2 {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .account-box p {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        button,
+        input[type="submit"] {
+            background: linear-gradient(to right, #6549d5, #48c1ba);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover,
+        input[type="submit"]:hover {
+            opacity: 0.85;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        #login-form {
+            display: none;
+            padding: 20px 30px 30px 30px;
+            overflow: hidden;
+        }
+        #login-form[style*="block"] { 
+             animation: fadeInSlideUp 0.3s ease-out forwards;
+        }
+
+
+        #login-form h2 {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        #login-form form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        #login-form label {
+            display: block;
+            text-align: left;
+            color: #555;
+           /* font-weight: 500;*/
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1em;
+            background-color: #fdfdfd;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #7B60F0;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(123, 96, 240, 0.25);
+        }
+        
+        #login-form input[type="submit"] {
+             width: 100%;
+             margin-top: 10px;
+        }
+
+        p#signup-link {
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        p#signup-link a.signup-link {
+            color: #7B60F0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease, text-decoration 0.3s ease;
+        }
+
+        p#signup-link a.signup-link:hover {
+            text-decoration: underline;
+            color: #5a3fdb; /* Darken link color on hover */
+        }
+
+        #signup-link { 
+            display: none; 
+        }
+
+        @media (min-width: 600px) {
+            .account-options {
+                flex-direction: row;
+                justify-content: space-around;
+            }
+            .account-box {
+                 width: 45%;
+            }
+        }
+
+    </style>
+
+    <script>
+        function showLogin(role) {
+            document.getElementById('role').value = role;
+            
+            const initialContent = document.getElementById('initial-content');
+            if (initialContent) {
+                initialContent.classList.add('hidden');
+            
+                    if(initialContent.classList.contains('hidden')){ 
+                        initialContent.style.display = 'none'; 
+                    }
+                
+            }
+
+            const loginForm = document.getElementById('login-form');
+            loginForm.style.display = 'block'; 
+
+            document.getElementById('user-type').textContent = role.charAt(0).toUpperCase() + role.slice(1);
+
+            const signupLinkP = document.getElementById('signup-link');
+            if (role === 'student') {
+                signupLinkP.style.display = 'block';
+            } else {
+                signupLinkP.style.display = 'none';
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-wave">
+            <h1>MMC COLLEGE LIBRARY</h1>
+        </div>
+
+        <div id="initial-content"> <div id="account-choice-message">
+                Choose your account type to log in
+            </div>
+            <div class="account-options">
+                <div class="account-box">
+                    <img src="uploads/required_pics/studentSymbol.jpg" alt="Student Icon">
+                    <h2>I'm a Student</h2>
+                    <p>Access learning tools and library resources.</p>
+                    <button onclick="showLogin('student')">Log in as Student</button>
+                </div>
+
+                <div class="account-box">
+                    <img src="uploads/required_pics/librarianSymbol.jpg" alt="Librarian Icon">
+                    <h2>I'm a Librarian</h2>
+                    <p>Manage library resources and student access.</p>
+                    <button onclick="showLogin('librarian')">Log in as Librarian</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="login-form"> <h2><span id="user-type"></span> Login</h2>
+            <form action="login.php" method="POST">
+                <input type="hidden" name="role" id="role">
+                <div>
+                    <label for="username">User ID:</label>
+                    <input type="text" id="username" name="username" required placeholder="Enter your ID">
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                <p id="signup-link">Not signed up? <a href="signup.php" class="signup-link">Sign up here</a></p>
+                <input type="submit" value="Login">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

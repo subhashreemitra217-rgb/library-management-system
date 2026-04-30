@@ -1,0 +1,134 @@
+<!-- <?php
+    session_start();
+    session_unset(); // Unset all session variables
+    session_destroy(); // Destroy the session
+?> -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan QR and Submit Action</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #D2D0A0, rgba(87, 140, 186, 0.74), rgb(79, 166, 109));
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #reader {
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:nth-child(3) { background-color: #007bff; }
+        button:nth-child(4) { background-color: #ffc107; }
+
+        button:hover {
+            opacity: 0.9;
+        }
+        /* Go Back Styles */
+        .back {
+            color: black;
+            margin-bottom: 0px;
+            border-radius: 150px;
+            margin-right: 934px;
+            text-decoration: none;
+            display: flex;
+            gap: 10px
+        }
+
+        .back p {
+            font-size: 27px;
+            align-self: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .back img {
+            height: 42px;
+            margin-top: 24px;
+        }
+
+        .back:hover {
+            transform: scale(1.2);
+            animation: scale 1.5s ease infinite;
+        }
+
+        @keyframes scale {
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1.2);
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <a href="adminHomePage.php" class="back">
+        <img src="uploads/required_pics/back.png" alt="">
+        <p>Go Back to Home Page</p>
+    </a>
+    <h2>Scan Book QR Code</h2>
+    
+    <div id="reader"></div>
+
+    <form id="QRScan" method="POST" action="issue.php">
+        <input type="text" name="isbn" id="isbn" placeholder="Scanned ISBN" required>
+        <input type="text" name="user_id" placeholder="Enter User ID" required>
+        <button name="action" value="issue">Issue Book</button>
+        <button name="action" value="return">Return Book</button>
+        <button name="action" value="reissue">Reissue Book</button>
+    </form>
+
+    <script>
+        const scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+
+        function extractISBN(text) {
+            // Extract a 10 or 13 digit ISBN from the scanned text
+            const match = text.match(/\b(?:\d{9}[\dXx]|\d{13})\b/);
+            return match ? match[0] : null;
+        }
+
+        scanner.render((decodedText) => {
+            const isbn = extractISBN(decodedText);
+            if (isbn) {
+                document.getElementById("isbn").value = isbn;
+                scanner.clear(); // Stop the scanner after successful read
+            } else {
+                alert("No valid ISBN found in QR code. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>
